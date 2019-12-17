@@ -4,12 +4,23 @@
 // colTotales es la cantidad de columnas totales de la tabla
 // regPorPagina cantidad de registros se muestran en la tabla (para facilitar el configurado global del sistema)
 // config= 'completo' muestra los botones de export
-//         'simple'   no muestra botones (igualmente deja un div #buttons para insertar desde afuera un boton personalizado)
+//         'simple'   no muestra botones, buscador por defecto (igualmente deja un div #buttons para insertar desde afuera un boton personalizado)
+//         'simpleFindLeft' no muestra botones, buscador a la izquierda (igualmente deja un div #buttons para insertar desde afuera un boton personalizado)
 // buttonConfig recibe un array con los datos necesarios para configurar los botones
 //       se debe especificar text:       nombre del boton
 //                     className:  clase personalizada
 //                     action:     texto a buscar dentro de la columna
 //                     column:     columna en donde buscar el valor de action
+//       ejemplo:
+//         var buttonConfig = 
+//         [                
+//             {
+//                 text: 'Pendientes',
+//                 className: 'btn  mr-0 ',
+//                 action: 'Pendiente',
+//                 column: '7'
+//             },
+//         ]
 
 function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonConfig){
     colASumar = colASumar-1;
@@ -30,7 +41,10 @@ function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonC
     }
     var domConfig = '<"row mt-2"<"#buttons.col-md-12"Bf>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>';
     if (config=='simple'){
-        domConfig = '<"row mt-2"<"#buttons.col-md-12"f>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>'
+        domConfig = '<"row mt-2"<"#buttons.col-md-12"Bf>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>';
+    }
+    if (config=='simpleFindLeft'){
+        domConfig = "<'d-flex justify-content-between align-items-center'<f><'mb-2'<'#buttons'>>>rtp";
     }
     var table = $(idTabla).DataTable({
             dom: domConfig,
