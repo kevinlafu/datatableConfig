@@ -1,0 +1,48 @@
+
+    $(document).ready(function() {
+    
+        var buttonConfig = 
+        [                
+            {
+                text: 'Pendientes',
+                className: 'btn  mr-0 ',
+                action: 'Pendiente',
+                column: '7'
+            },
+            {
+                text: 'Parciales',
+                className: 'btn  mr-0 ',
+                action: 'Parcial',
+                column: '7'
+            },
+            {
+                text: 'Cobradas',
+                className: 'btn  mr-0 ',
+                action: 'Cobrada',
+                column: '7'
+            },
+            {
+                text: 'Devueltas',
+                className: 'btn  mr-0 ',
+                action: 'Devuelta',
+                column: '7'
+            },
+            {
+                text: 'Anuladas',
+                className: 'btn  mr-0 ',
+                action: 'Anulada',
+                column: '7'
+            },
+            {
+                text: 'Todos',
+                className: 'btn  mr-3 ',
+                action: '',
+                column: '7'
+            },                      
+        ];
+
+        
+
+        initDataTable('#tabla-comprobantes',7,9,8,'simple',buttonConfig);
+
+    });
