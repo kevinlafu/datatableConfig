@@ -23,7 +23,8 @@
 //         ]
 
 function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonConfig){
-    colASumar = colASumar-1;
+    
+    regPorPagina
     var buttonConfig2 = [];
     buttonConfig.forEach(myFunction);
     function myFunction(item, index) {
@@ -39,9 +40,9 @@ function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonC
             }
         });
     }
-    var domConfig = '<"row mt-2"<"#buttons.col-md-12"Bf>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>';
+    var domConfig = '<"row mt-2"<"#buttons.col-md-12"Bf>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>'; 
     if (config=='simple'){
-        domConfig = '<"row mt-2"<"#buttons.col-md-12"Bf>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>';
+        domConfig = '<"row mt-2"<"#buttons.col-md-12"f>>'+ 't' + '<"row"<"col-md-6 col-lg-6 col-xl-6"i><"col-md-6 col-lg-6 col-xl-6"p>>';
     }
     if (config=='simpleFindLeft'){
         domConfig = "<'d-flex justify-content-between align-items-center'<f><'mb-2'<'#buttons'>>>rtp";
@@ -51,32 +52,35 @@ function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonC
             "iDisplayLength": regPorPagina,
             "destroy": true,
             "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-                // Total over all pages
-                total = api
-                    .column( colASumar )
-                    .data()
-                    .reduce( function (a, b) {
-                        b = b.replace(/\./g,'');
-                        b = b.replace(/\,/g,'.');
-                        a = parseFloat(a);
-                        return a + parseFloat(b);
-                    }, 0 );
-                // Total over this page
-                pageTotal = api
-                    .column( colASumar, { page: 'current'} )
-                    .data()
-                    .reduce( function (a, b) {
-                        b = b.replace(/\./g,'');
-                        b = b.replace(/\,/g,'.');
-                        a = parseFloat(a);
-                        return a + parseFloat(b);
-                    }, 0 );
+                if(config != 'completoNoTotal'){    
+                    var api = this.api(), data;
+                    // Total over all pages
+                
+                    total = api
+                        .column( colASumar )
+                        .data()
+                        .reduce( function (a, b) {
+                            b = b.replace(/\./g,'');
+                            b = b.replace(/\,/g,'.');
+                            a = parseFloat(a);
+                            return a + parseFloat(b);
+                        }, 0 );
+                    // Total over this page
+                    pageTotal = api
+                        .column( colASumar, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            b = b.replace(/\./g,'');
+                            b = b.replace(/\,/g,'.');
+                            a = parseFloat(a);
+                            return a + parseFloat(b);
+                        }, 0 );
 
-                // Update footer
-                $( api.column( colASumar ).footer() ).html(
-                    '$'+ number_format(pageTotal,2,',','.') +' - ($'+ number_format(total,2,',','.') +' total)'
-                );
+                    // Update footer
+                    $( api.column( colASumar ).footer() ).html(
+                        '$'+ number_format(pageTotal,2,',','.') +' - ($'+ number_format(total,2,',','.') +' total)'
+                    );
+                }
             },
             buttons: buttonConfig2,               
             columnDefs: [
@@ -119,7 +123,7 @@ function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonC
         });
 
         
-        if (config=='completo'){
+        if (config!='simple'){
             new $.fn.dataTable.Buttons( table, {
                 buttons: [
                     {
@@ -172,12 +176,10 @@ function initDataTable (idTabla,colASumar,colTotales,regPorPagina,config,buttonC
                     },
                 ]
             });
-
+            table.buttons().container().appendTo($( "#buttons" ));
         }
-        table.buttons().container().addClass("btn-group btn-group-sm");
-        if (config == 'completo'){
-        table.buttons().container().appendTo($( "#buttons" ));
-        }
+        
+        table.buttons().container().addClass("btn-group btn-group-sm");       
         $(".dt-button").addClass("btn btn-alt-primary borde");
         $(".dt-button").removeClass("dt-button");
         $(".dataTables_filter").addClass("float-right");
